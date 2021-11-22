@@ -1,0 +1,33 @@
+{%extends 'main/base_main.html'%}
+{%load crispy_forms_tags%}
+
+{%block title%}Classrooms View{%endblock%}
+
+
+{%block content%}
+
+
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-5 col-md-6 col-sm-12">
+
+            {%for room in teacher_rooms%}
+            <p>{{room.title}}</p>
+            {%endfor%}
+
+            {%for room in student_rooms%}
+            <p>{{room.title}}</p>
+            {%endfor%}
+
+
+        </div>
+    </div>
+
+
+
+    
+
+</div>
+
+{%endblock%}

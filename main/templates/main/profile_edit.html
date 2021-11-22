@@ -1,0 +1,70 @@
+{%extends 'main/base_main.html'%}
+{%load crispy_forms_tags%}
+
+{%block title%}Profile{%endblock%}
+
+
+{%block content%}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-5 col-md-6 col-sm-12">
+
+<!--
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{form | crispy}}
+                <button class="btn btn-success mt-2">Update profile!</button>
+
+            </form>
+
+-->
+
+
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="mt-5">
+                    <div class="d-flex">
+                        <img class="rounded-circle p-2" width="100" height="100" src=" {{user.profile.image.url}} ">
+                        <div class='d-flex p-4 mt-3 justify-content-right'>
+                            <strong>Update&nbsppitcure:&nbsp&nbsp&nbsp&nbsp&nbsp</strong>
+                            {{form.image}}
+                           
+                        </div>
+                    </div>
+                    
+                    <table class="mt-5">
+                        <tr class="space">
+                            <th class="">Name: </th>
+                            <td>{{form.name}}</td>
+                        </tr>
+
+                        <tr class="space">
+                            <th>Birthday: &nbsp &nbsp &nbsp</th>
+                            <td>{{form.birthday}}</td>
+                        </tr>
+
+                        <tr class="space">
+                            <th>Bio:</th>
+                            <td>{{form.bio}}</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <button type="submit" class="btn btn-outline-success mt-5">Update profile</button>
+
+            </form>
+
+
+
+
+
+
+
+        </div>
+    </div>
+
+
+</div>
+
+{%endblock%}

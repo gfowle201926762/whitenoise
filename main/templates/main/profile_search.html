@@ -1,0 +1,51 @@
+{%extends 'main/base_main.html'%}
+{%load crispy_forms_tags%}
+
+{%block title%}Profile Search{%endblock%}
+
+{%block content%}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-5 col-md-6 col-sm-12">
+
+        {%for profile in profile_list%}
+        
+
+            <div class="card my-2">
+                <div class="d-flex justify-content-between">
+                
+                    <a class="text-decoration-none d-inline-flex" style="color:black" href="{% url 'profile_view' profile.pk %}">
+                        <div class="d-inline-flex align-items-center">
+                            <img class="rounded-circle p-2" width="40" height="40" src=" {{profile.image.url}} "><span class="lead px-2">{{profile.name}}</span>
+                            
+                        </div>
+                    </a>
+
+                    <div class="d-inline-flex align-items-center">
+                        <form method="POST" action="{% url 'follow' profile.pk %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="next" value="{{ request.path }}">
+                            <input type="hidden" name="query" value="{{ request.GET.query }}">
+                            <button style="background-color: transparent; border: none; box-shadow: none;" type="submit">
+                            {%if request.user != profile.user%}
+                                {%if request.user in profile.followers.all%}
+                                    <span class="lead px-2">Unfollow</span>
+                                {%else%}
+                                    <span class="lead px-2">Follow</span>
+                                {%endif%}
+                            {%endif%}
+                            </button>
+                        </form>
+                    </div>
+                    
+                </div>
+            </div>
+
+        
+        {%endfor%}
+        
+
+        </div>
+    </div>
+</div>
+{%endblock%}

@@ -1,0 +1,39 @@
+{%extends 'main/base_main.html'%}
+{%load crispy_forms_tags%}
+
+{%block title%}Post Creation{%endblock%}
+
+
+{%block content%}
+
+
+
+<div class="container">
+
+
+    <div class="row justify-content-center">
+        <div class="col-lg-5 col-md-6 col-sm-12">
+
+            <form method="POST">
+                {% csrf_token %}
+                {{form | crispy}}
+                <div class="d-grid mt-2">
+                {% if request.path == '/make_a_post/' %}
+                <button type="submit" class="btn btn-outline-success">Post</button>
+                {%else%}
+                <button type="submit" class="btn btn-outline-success">Edit</button>
+                {%endif%}
+                </div>
+            </form>
+
+
+        </div>
+    </div>
+
+
+
+    
+
+</div>
+
+{%endblock%}

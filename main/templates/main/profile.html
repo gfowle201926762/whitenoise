@@ -1,0 +1,154 @@
+{%extends 'main/base_main.html'%}
+{%load crispy_forms_tags%}
+
+{%block title%}Profile{%endblock%}
+
+
+{%block content%}
+
+<div class="container mt-5">
+<br></br>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-5 col-md-6 col-sm-12">
+
+            <div class="card">
+                <div class="d-flex justify-content-between">
+                    <div class="d-flex">
+                        <img class="rounded-circle p-2" width="100" height="100" src=" {{profile.image.url}} ">
+                        <div class="media-body p-4">
+                            <h2> {{profile.name}} </h2>
+                            <p> {{user.email}} </p>
+                        </div>
+                    </div>
+
+                    <div class="d-flex p-4">
+                        <p>Posts: {{profile.user.posts.all.count}}</p>
+                        <a class="text-decoration-none" style="color:black" href="{% url 'followers' profile.pk %}"> <p>Followers: {{profile.followers.all.count}}</p></a>
+                        <a class="text-decoration-none" style="color:black" href="{% url 'following' profile.pk %}"><p>Following: {{profile.following.all.count}}</p></a>
+                    </div>
+                </div>
+
+                {%if profile.birthday%}
+                <p>{{profile.birthday}}</p>
+                {%endif%}
+
+                {%if profile.bio%}
+                <p>{{profile.bio}}</p>
+                {%endif%}
+
+                {%if request.user == user%}
+                <form method="GET" action="{% url 'profile_edit' profile.pk %}">
+                    <button style="background-color: transparent; border: none; box-shadow: none;" type="submit">
+                    <i class="fas fa-edit"></i></button>
+                </form>
+                {%endif%}
+
+                {%if request.user != user%}
+                    <form method="POST" action="{% url 'follow' profile.pk %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{{ request.path }}">
+                        <button style="background-color: transparent; border: none; box-shadow: none;" type="submit">
+                        {%if is_following == False%}
+                            <i>Follow</i></button>
+                        {%else%}
+                            <i>Unfollow</i>
+                        {%endif%}
+                    </form>
+                {%endif%}
+            </div>
+
+
+
+
+
+
+            {%if user.posts.all.count == 0 %}
+                {%if request.user == user%}
+                <div class="mt-4 d-flex align-items-center justify-content-between">
+
+                    <p class="lead">You don't have any posts!</p>
+                    <p class="float-right">Make a post <a class="text-decoration-none" href="{% url 'post_creation' %}"> here</a></p>
+                </div>
+                {%else%}
+                    <p class="mt-4">This user doesn't have any posts!</p>
+                {%endif%}
+            {%else%}
+                {%if request.user == user%}
+                
+                <div class="mt-4 d-flex align-items-center justify-content-between">
+                
+                    <p class="lead">Your posts:</p> 
+                    <p class="float-right">Make another post <a class="text-decoration-none" href="{% url 'post_creation' %}"> here</a></p>
+                </div>
+                {%else%}
+                    <p class="mt-4">Posts by {{profile.name}}</p>
+                {%endif%}
+            {%endif%}
+
+
+
+
+
+            
+            {% for post in posts %}
+            <div class="card mb-4">
+
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between">
+                            <strong>{{post.author.profile.name}}</strong>
+                            <small>{{post.created_on}}</small>
+                            <div class="d-flex">
+                                {%if request.user == post.author %}
+                                    <form method="GET" action="{% url 'post_edit' post.pk %}">
+                                        <button style="background-color: transparent; border: none; box-shadow: none;" type="submit">
+                                        <i class="fas fa-edit"></i></button>
+                                    </form>
+
+                                    <form method="POST" action= "{% url 'post_delete' post.pk %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="next" value="{% url 'profile_view' profile.pk %}">
+                                        <button style="background-color: transparent; border: none; box-shadow: none;" type="submit">
+                                        <i class="fas fa-trash-alt"></i></button>
+                                    </form>
+                                {%endif%}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body position-relative">
+                        <p class="card-text">{{post.body}}</p>
+                        <a href="{%url 'post_detail' post.pk%}" class="stretched-link"></a>
+                    </div>
+
+                    <div class=" d-flex card-footer justify-content-between">
+
+                        <form method="POST" action="{% url 'post_like' post.pk %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="next" value="{{request.path}}">
+                            <button style="background-color: transparent; border: none; box-shadow: none;" type="submit">
+                            <i class="far fa-thumbs-up"><span>{{post.likes.all.count }}</span></i></button>
+                        </form>
+
+                        {%if post.comments.all.count == 1%}
+                        <a class="text-decoration-none" style="color:black" href="{% url 'post_detail' post.pk %}"><small>{{post.comments.all.count}} comment</small></a>
+                        {%else%}
+                        <a class="text-decoration-none" style="color:black" href="{% url 'post_detail' post.pk %}"><small>{{post.comments.all.count}} comments</small></a>
+                        {%endif%}
+
+                        <!-- --> <small>Share</small>
+
+                        
+                    </div>
+
+
+                </div>
+            {%endfor%}
+
+        </div>
+    </div>
+
+
+</div>
+
+{%endblock%}

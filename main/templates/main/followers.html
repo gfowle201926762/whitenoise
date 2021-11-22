@@ -1,0 +1,61 @@
+{%extends 'main/base_main.html'%}
+{%load crispy_forms_tags%}
+
+{%block title%}Followers{%endblock%}
+
+
+{%block content%}
+
+
+
+<div class="container">
+
+
+    <div class="row justify-content-center">
+        <div class="col-lg-5 col-md-6 col-sm-12">
+        <span>
+            <a class="text-decoration-none" style="color:black" href="{% url 'profile_view' profile.pk %}">
+                <div class="d-inline-flex align-items-center">
+                    <img class="rounded-circle p-2" width="70" height="70" src=" {{profile.image.url}} "><span class="display-4 px-2">{{profile.name}}</span>
+                </div>
+            </a>
+            <br></br>
+            <h4 class="mb-3">Followers: {{profile.followers.all.count}}</h4>
+
+            {%for follower in followers%}
+                <div class="card my-2">
+                <div class="d-flex justify-content-between">
+                    <a class="text-decoration-none d-inline-flex" style="color:black" href="{% url 'profile_view' follower.profile.pk %}">
+                        <div class="d-inline-flex align-items-center">
+                            <img class="rounded-circle p-2" width="40" height="40" src=" {{follower.profile.image.url}} "><span class="lead px-2">{{follower.profile.name}}</span>
+                        </div>
+                    </a>
+
+                    <div class="d-inline-flex align-items-center">
+                        <form method="POST" action="{% url 'follow' follower.profile.pk %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="next" value="{{ request.path }}">
+                            <button style="background-color: transparent; border: none; box-shadow: none;" type="submit">
+                                {%if request.user != follower%}
+                                    {%if request.user in follower.profile.followers.all%}
+                                        <span class="lead px-2">Unfollow</span>
+                                    {%else%}
+                                        <span class="lead px-2">Follow</span>
+                                    {%endif%}
+                                {%endif%}
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                </div>
+            {%endfor%}
+            
+        </span>
+
+        </div>
+    </div>
+
+
+</div>
+
+{%endblock%}

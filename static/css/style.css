@@ -1,0 +1,19 @@
+.trm-xs{
+    margin-top: 1em;
+}
+
+.trm-s{
+    margin-top: 2em;
+}
+
+.trm-m{
+    margin-top: 5em
+}
+
+.trm-l{
+    margin-top: 10em
+}
+
+tr.space>td {
+    padding: 0.5em;
+  }

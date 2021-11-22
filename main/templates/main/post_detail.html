@@ -1,0 +1,131 @@
+{%extends 'main/base_main.html'%}
+{%load crispy_forms_tags%}
+
+{%block title%}Post Detail{%endblock%}
+
+
+{%block content%}
+
+<div class="container">
+
+
+    <div class="row justify-content-center">
+        <div class="col-lg-5 col-md-6 col-sm-12">
+
+            <div class="card my-4">
+
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between">
+                            <strong><a class="text-decoration-none" style="color:black" href="{% url 'profile_view' post.author.profile.pk %}"><img class="rounded-circle p-2" width="40" height="40" src=" {{post.author.profile.image.url}} ">{{post.author.profile.name}}</strong></a>
+                            <small>{{post.created_on}}</small>
+                            <div class="d-flex">
+                                {%if request.user == post.author %}
+                                    <form method="GET" action="{% url 'post_edit' post.pk %}">
+                                        <button style="background-color: transparent; border: none; box-shadow: none;" type="submit">
+                                        <i class="fas fa-edit"></i></button>
+                                    </form>
+                                    <form method="POST" action= "{% url 'post_delete' post.pk %}">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="next" value="{% url 'home' %}">
+                                        <button style="background-color: transparent; border: none; box-shadow: none;" type="submit">
+                                        <i class="fas fa-trash-alt"></i></button>
+                                    </form>
+                                {%endif%}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body position-relative">
+                        <p class="card-text">{{post.body}}</p>
+                        <a href="{%url 'post_detail' post.pk%}" class="stretched-link"></a>
+                    </div>
+
+                    <div class="d-flex card-footer justify-content-between">
+                        <form method="POST" action="{% url 'post_like' post.pk %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="next" value="{{request.path}}">
+                            <button style="background-color: transparent; border: none; box-shadow: none;" type="submit">
+                            <i class="far fa-thumbs-up"><span>{{post.likes.all.count }}</span></i></button>
+                        </form>
+                        {%if post.comments.all.count == 1%}
+                        <a class="text-decoration-none" style="color:black" href="{% url 'post_detail' post.pk %}"><small>{{post.comments.all.count}} comment</small></a>
+                        {%else%}
+                        <a class="text-decoration-none" style="color:black" href="{% url 'post_detail' post.pk %}"><small>{{post.comments.all.count}} comments</small></a>
+                        {%endif%}
+
+                        <!-- --> <small>Share</small>
+                    </div>
+
+            </div>
+
+            <form method="POST">
+                {% csrf_token %}
+                {{form | crispy}}
+                <div class=d-grid>
+                <button type="submit" class="btn btn-outline-success">Comment</button>
+                </div>
+            </form>
+
+            {% if post.comments.all %}
+            <br></br>
+            <p class="lead">Comments...</p>
+            {% for comment in post.comments.all %}
+
+                <div class="card my-1">
+                
+                    <div class="card-header bg-transparent">
+
+                        <div class="d-flex justify-content-between">
+                            <strong><a class="text-decoration-none" style="color:black" href="{% url 'profile_view' comment.author.profile.pk %}"><img class="rounded-circle p-2" width="40" height="40" src=" {{comment.author.profile.image.url}} ">{{comment.author.profile.name}}</strong></a>
+                            <small>{{comment.created_on}}</small>
+
+                            <div class="d-flex">
+                                {%if request.user == comment.author %}
+                                <form method="GET" action="{% url 'comment_edit' post.pk comment.pk %}">
+                                    <button style="background-color: transparent; border: none; box-shadow: none;" type="submit">
+                                    <i class="fas fa-edit"></i></button>
+                                </form>
+
+                                <form method="POST" action="{% url 'comment_delete' comment.pk %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="next" value="{{request.path}}">
+                                    <button style="background-color: transparent; border: none; box-shadow: none;" type="submit">
+                                    <i class="fas fa-trash-alt"></i></button>
+                                </form>
+                                {%endif%}
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="card-body bg-transparent">
+                        <p class="card-text">{{comment.body}}</p>
+                    </div>
+
+                    <div class="card-footer bg-transparent">
+                        <form method="POST" action="{% url 'comment_like' comment.pk %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="next" value="{{request.path}}">
+                            <button style="background-color: transparent; border: none; box-shadow: none;" type="submit">
+                            <i class="far fa-thumbs-up"><span>{{comment.likes.all.count }}</span></i></button>
+                        </form>
+                    </div>
+
+                </div>
+
+            {%endfor%}
+            {%endif%}
+           
+
+
+
+        </div>
+    </div>
+
+
+
+    
+
+</div>
+
+{%endblock%}
