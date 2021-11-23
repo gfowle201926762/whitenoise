@@ -52,7 +52,7 @@ class Comment(models.Model):
 class UserProfile(models.Model):
     user = models.OneToOneField(User, related_name='profile', on_delete=models.CASCADE)
     name =models.CharField(max_length=100, blank=True, null=True)
-    image = models.ImageField(upload_to='uploads/profile_pictures', default='uploads/profile_pictures/default_profile_picture.jpeg', blank=True)
+    image = models.ImageField(upload_to='media/uploads/profile_pictures', default='media/uploads/profile_pictures/default_profile_picture.jpeg', blank=True)
     bio = models.TextField(blank=True, null=True)
     birthday = models.DateField(blank=True, null=True)
     followers = models.ManyToManyField(User, blank=True, related_name='followers')
