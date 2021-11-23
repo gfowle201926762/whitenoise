@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-hcp*t$b*czbi2q(v36qihb36-j*rsm28g_4*0(!tz61y$on6f&'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['fluenco.herokuapp.com', '127.0.0.1']
 

@@ -50,3 +50,8 @@ class Logout_page(View):
     def get(self, request, *args, **kwargs):
         context = {}
         return render(request, 'landing/logout_page.html', context)
+
+class About(View):
+    def get(self, request,*args, **kwargs):
+        context = {}
+        return render(request, 'landing/about.html', context)
