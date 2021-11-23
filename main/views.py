@@ -29,7 +29,7 @@ class PostCreation(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         form = PostForm()
         context = {
-            'form' : form
+            'form' : form,
         }
         print(request.path)
         return render(request, 'main/post_creation.html', context)
@@ -54,7 +54,7 @@ class PostDetail(LoginRequiredMixin, View):
         form = CommentForm()
         context = {
             'post' : post,
-            'form' : form
+            'form' : form,
         }
         return render(request, 'main/post_detail.html', context)
 
@@ -264,8 +264,10 @@ class ProfileSearchView(View):
 class CreateClassroomView(View):
     def get(self, request, *args, **kwargs):
         form = ClassroomForm()
+        profile = UserProfile.objects.get(pk=request.user.profile.pk)
         context = {
-            'form': form
+            'form': form,
+            'profile' : profile,
         }
         return render(request, 'main/classroom_create.html', context)
 

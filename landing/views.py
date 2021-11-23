@@ -20,6 +20,7 @@ class Login(View):
         form = AuthenticationForm(data=request.POST)
         if form.is_valid():
             user = form.get_user()
+            #pk = user.profile.pk
             login(request, user)
             return redirect('home')
 
