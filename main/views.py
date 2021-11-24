@@ -11,11 +11,9 @@ from .forms import PostForm, CommentForm, UserProfileForm, ClassroomForm
 
 class Home(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
-        #posts = Post.objects.all().order_by('-created_on')
-        user = request.user
 
-        posts = Post.objects.filter(author__profile__followers__in=[user.id]).order_by('-created_on')
-
+        posts = Post.objects.filter(Q(author__profile__followers__in=[request.user.id]) | Q(author__in=[request.user.id])).order_by('-created_on').distinct()
+        
         context = {
             'posts' : posts,
         }
